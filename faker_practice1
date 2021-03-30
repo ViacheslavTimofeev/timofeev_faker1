@@ -1,0 +1,29 @@
+from pymongo import MongoClient
+from faker import Faker
+import datetime
+from bson import ObjectId
+
+fake = Faker()
+
+
+person = fake.name()
+person_address = fake.address()
+client = MongoClient('localhost', 27017)
+db = client.test
+users = db.users
+posts = db.posts
+
+list_users = {}
+lst_user = []
+for _ in range(10):
+    user = fake.profile()
+    list_users = {
+    'username': user['username'],
+    'name':user['name'],
+    'mail':user['mail'],
+    'datetime': datetime.datetime.utcnow()
+    }
+    lst_user.append(list_users)
+
+users.insert_many(lst_user)
+
